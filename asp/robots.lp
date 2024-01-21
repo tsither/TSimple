@@ -1,3 +1,4 @@
+% Making it a simple solution
 % Please insert the names and email addresses of the group members:
 % 
 %
