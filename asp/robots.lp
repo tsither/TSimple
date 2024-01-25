@@ -49,7 +49,7 @@ time(0..n).
 % #show robot/3.
 % #show move/3.
 #show at/3.
-% #show assign/3.
+#show assign/3.
 % #show edge/2.
 % :- not at(r2,6,3).
 % :- not at(r2,3,4).
@@ -70,11 +70,11 @@ at(R,N,T) :- robot(R,_,N), T=0.                                                 
 % {at(R,N2,T)} :- robot(R,_,N), move(R,N1,N2), T=1..n.                                    %generate at nodes for all possible time stamps
 
 %recursive at atom generation
-% {at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=T1+1, at(R,N1,T1), T2 <=n.                               %generate at nodes for all possible time stamps
+{at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=T1+1, at(R,N1,T1), T2 <=n.                               %generate at nodes for all possible time stamps
 
 
 
-{at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=1..n.                                    %generate at nodes for all possible time stamps
+% {at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=1..n.                                    %generate at nodes for all possible time stamps
 
 
 % % ROBOT cant be in two places at the same time

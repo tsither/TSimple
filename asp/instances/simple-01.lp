@@ -12,6 +12,3 @@ edge(X,X+1) :- X=1..2.
 robot(r1,c1,1).
 job(j1,c1,2).
   operation(j1,1,3).
-
-
-

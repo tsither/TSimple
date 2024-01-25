@@ -24,4 +24,3 @@ job(j3,c2,4).
 job(j4,c2,8).
   operation(j4,1,(1,3)).
   operation(j4,2,(3,3)).
-
