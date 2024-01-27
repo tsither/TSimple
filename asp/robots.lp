@@ -29,7 +29,7 @@
 %
 
 
-time(0..n).
+% time(0..n).
 
 % Your encoding please...
 
@@ -39,7 +39,7 @@ time(0..n).
 % #show robot/3.
 % #show move/3.
 % #show at/3.
-#show last_operation/3.
+% #show last_operation/3.
 % #show assign/3.
 % #show job_complete/2.
 % #show edge/2.
@@ -50,28 +50,28 @@ time(0..n).
 % {move(R, N1, N2)} :- robot(R,C,N), edge(N1,N2).                                         %generate movement atoms for the robots
 % {move(R, N2, N1)} :- robot(R,C,N), edge(N1,N2).                                        
 
-edge(N2,N1) :- edge(N1,N2).
+% edge(N2,N1) :- edge(N1,N2).
 
 
 
 % GENERATE 'at' atoms 
 
 %must be 'at' atom on the node the robots starts on
-at(R,N,T) :- robot(R,_,N), T=0.                                                         %create at atom for the start nodes of the robots
+% at(R,N,T) :- robot(R,_,N), T=0.                                                         %create at atom for the start nodes of the robots
 
 % {at(R,N2,T)} :- robot(R,_,N), move(R,N1,N2), T=1..n.                                    %generate at nodes for all possible time stamps
 
 %recursive at atom generation
-{at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=T1+1, at(R,N1,T1), T2 <=n.  
+% {at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=T1+1, at(R,N1,T1), T2 <=n.  
 
-{at(R,N1,T2)} :- robot(R,_,N), T2=T1+1, at(R,N1,T1), T2 <=n.                               
+% {at(R,N1,T2)} :- robot(R,_,N), T2=T1+1, at(R,N1,T1), T2 <=n.                               
 
 
 % {at(R,N2,T2)} :- robot(R,_,N), edge(N1,N2), T2=1..n.                                    %generate at nodes for all possible time stamps
 
 
 % % ROBOT cant be in two places at the same time
-:- robot(R,_,_), at(R,N1,T1), at(R,N2,T2), T1=T2, N1!=N2.
+% :- robot(R,_,_), at(R,N1,T1), at(R,N2,T2), T1=T2, N1!=N2.
 
 
 
@@ -92,34 +92,34 @@ at(R,N,T) :- robot(R,_,N), T=0.                                                 
 
 
 % % %two robots cant be in the same place at the same time
-:- at(R1,N1,T1), at(R2,N2,T2), R1!=R2, N1=N2, T1=T2.
+% :- at(R1,N1,T1), at(R2,N2,T2), R1!=R2, N1=N2, T1=T2.
 
 
 % % % % ensure there are the correct number of at atoms (must be an 'at' atom for every robot for every timestep)
-:-  robot(R,_,_), not at(R,_,1..n).
+% :-  robot(R,_,_), not at(R,_,1..n).
 
 
 
 % % ---------------------- Assign a robot to a job ---------------------- %
 
-job_count(X) :- X = #count{J,C,D : job(J,C,D)}.
+% job_count(X) :- X = #count{J,C,D : job(J,C,D)}.
 
 % % %generate assignment atoms
-{assign(R,J,P)} :- robot(R,C,_), job(J,C1,D), C=C1, job_count(X), P=1..X. %need to adjust P for later
+% {assign(R,J,P)} :- robot(R,C,_), job(J,C1,D), C=C1, job_count(X), P=1..X. %need to adjust P for later
 
 % % % robot needs to go to the node that the operation it's assigned to is on
-:- assign(R,J,P), job(J,C,D), robot(R,_,_), operation(J,O,N), not at(R,N,_).
+% :- assign(R,J,P), job(J,C,D), robot(R,_,_), operation(J,O,N), not at(R,N,_).
 
 
 % % %every job needs an assignment
-:-  job(J,C,D), not assign(_,J,_).
+% :-  job(J,C,D), not assign(_,J,_).
 
 
 % %you must assign jobs with greater durations to later positions in the sequence
-:-  job(J1,C1,D1), job(J2,C2,D2), assign(R,J1,P1), assign(R,J2,P2), D1>D2, P1<P2.
+% :-  job(J1,C1,D1), job(J2,C2,D2), assign(R,J1,P1), assign(R,J2,P2), D1>D2, P1<P2.
 
 % %you can't assign two jobs to the same position in the sequence
-:-  job(J1,C1,D1), job(J2,C2,D2), assign(R,J1,P1), assign(R,J2,P2), J1!=J2, P1=P2.
+% :-  job(J1,C1,D1), job(J2,C2,D2), assign(R,J1,P1), assign(R,J2,P2), J1!=J2, P1=P2.
 
 
 
@@ -131,7 +131,7 @@ job_count(X) :- X = #count{J,C,D : job(J,C,D)}.
 
 % Problem: robots aren't going to the nodes when they need to
 
-last_operation(J,O,N) :- #max{O, J : operation(J,O,N)}.
+% last_operation(J,O,N) :- #max{O, J : operation(J,O,N)}.
 
 
 % {job_complete(J,T1)} :- J=j1, job(j1,_,D), assign(R,j1,1), T1 = #max{N,T: at(R,N,T)}, operation(j1,O,N).
@@ -225,3 +225,88 @@ last_operation(J,O,N) :- #max{O, J : operation(J,O,N)}.
 
 % node(1..N) :- max_X(X), max_Y(Y), N = X*Y.
 % node(1..N) :- max(N).
+
+
+
+% ----------------------- Rough version ----------------------- % 
+
+% --------------- COMMANDS ---------------% 
+% Visualizing solutions from JSON:
+% cat asp/solutions-for-clingraph/corridor-01.json | clingraph --viz-encoding=asp/viz.lp  --out=animate --sort=asc-int  --engine=neato --prefix=viz_ --dir=img --name-format=model-{model_number}
+%
+% Visualizing personal solution:
+%  clingo asp/robots.lp asp/viz_show.lp asp/instances/corridor-01.lp -q1,1,2 --outf=2 --opt-mode=optN 0 | clingraph --viz-encoding=asp/viz.lp  --out=animate --sort=asc-int  --engine=neato --prefix=viz_ --dir=img --name-format=model-{model_number}
+%
+% clingo asp/robots.lp asp/instances/corridor-01.lp 0
+% 
+% python asp/test.py -e asp/robots.lp -i asp/instances -s asp/solutions -t 180 -opt
+
+
+% Making it a simple solution
+% Please insert the names and email addresses of the group members:
+% 
+%
+
+%
+% Input:
+%   #const n: the time steps range from 0 to n
+%   edge(N1,N2): there is an (undirected) edge between nodes N1 and N2
+%   robot(R,C,N): robot R is of class C and starts at node N
+%   job(J,C,D): job J is of class C and its deadline is D 
+%   operation(J,O,N): J's operation O takes place at node N (O >= 1)
+%
+% Output:
+%   at(R,N,T): robot R is at node N at time step T
+%   assign(R,J,P): assign to R the job J at position P (in the sequence of jobs assigned to R) (P >= 1)
+%
+
+
+% time(0..n).
+
+% Your encoding please...
+
+time(0..n).
+
+% Generating backward and forward edges for bidirectional movement
+bidirectional_edge(N1,N2) :- edge(N2,N1).
+bidirectional_edge(N2,N1) :- edge(N2,N1).
+
+
+% Generating all possible movements /  positions that the robot can be at
+{robot_moves(R,N1,N2)} :- robot(R,_,N), bidirectional_edge(N1,N2).
+
+% Saying that the robot must start at the first node
+at(R,N,T) :- robot(R,_,N), T=0.
+
+% Generating all possible moves from the start node
+{at(R,N2,T)} :- robot(R,_,N), robot_moves(R,N1,N2), T=1..n. 
+
+
+% Restricting the robot from being in two places at the same time
+:- at(R,N,T), at(R1,N1,T1), R1=R, N!=N1, T=T1.
+
+% It can not be that the robot moves between two nodes and the nodes are not adjacent
+:- at(R,N,T) , at(R, N1, T1), |T1-T| = 1, not |N1-N|=1 .
+
+
+% --------------- Job stuff ---------------% 
+
+% Job assigning 
+{assign(R,J,P)} :- robot(R,C,N), job(J,C1,D), P=N, C1 = C . 
+
+% Eliminate all those sets where a robots time exceeds the job's duration
+:- robot(_,_,_), job(_,_,D), at(_,_,T), T>D .
+
+% 
+
+
+% :- at(R,N,T), at(R1,N1,T1) , robot(R,_,N), T=T1, N!=N1, R=R1. 
+% #show robot_moves/3.
+% #show robot_moves/3.
+#show at/3.
+% #show assign/3.
+
+
+
+
+
